@@ -1,28 +1,20 @@
 class Solution {
-public:
-    bool check(vector<string> v) {
-        int len =v.size();
-        if(len < 3) return false;
+ public:
+  vector<string> findHighAccessEmployees(vector<vector<string>>& access_times) {
+    unordered_set<string> ans;
 
-        if((stoi(v[len-1]) - stoi(v[0])) < 100) return true;
-        return false;
-    }
-    vector<string> findHighAccessEmployees(vector<vector<string>>& A) {
-        unordered_map<string, vector<string>> hm;
-        for(auto e : A) {
-            hm[e[0]].push_back(e[1]);
-        }
+    ranges::sort(access_times);
 
-        vector<string> ans;
-        for(auto keyVal : hm) {
-            string key = keyVal.first;
-            
-            sort(hm[key].begin(), hm[key].end());
-            if(check(hm[key])) {
-                ans.push_back(key);
-            }
-        }
-        
-        return ans;
+    for (int i = 0; i + 2 < access_times.size(); ++i) {
+      const string& name = access_times[i][0];
+      if (ans.count(name))
+        continue;
+      if (name != access_times[i + 2][0])
+        continue;
+      if (stoi(access_times[i + 2][1]) - stoi(access_times[i][1]) < 100)
+        ans.insert(name);
     }
+
+    return {ans.begin(), ans.end()};
+  }
 };
